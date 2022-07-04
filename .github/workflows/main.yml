@@ -10,7 +10,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     steps:
        - name: Checkout
@@ -18,7 +18,7 @@ jobs:
          
        - name: Setup Envoirment
          run: |
-            sudo -E apt-get -qq install git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison device-tree-compiler python3-minimal
+            sudo -E apt-get -qq install git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison device-tree-compiler
             sudo -E apt-get -qq --reinstall install python3-minimal
        - name: Clone Kernel
          run: |
