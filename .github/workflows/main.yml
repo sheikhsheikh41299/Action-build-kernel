@@ -18,7 +18,8 @@ jobs:
          
        - name: Setup Envoirment
          run: |
-            sudo -E apt-get -qq install git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison device-tree-compiler   
+            sudo -E apt-get -qq install git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison device-tree-compiler python3-minimal
+            
        - name: Clone Kernel
          run: |
             git clone $KERNEL --depth=1 -b $KERNEL_BRANCH kernel
