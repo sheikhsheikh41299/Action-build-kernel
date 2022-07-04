@@ -30,7 +30,7 @@ jobs:
             cd kernel
             bash build.sh
             
-       - uses: actions/upload-artifact@v2
+       - uses: actions/upload-artifact@v3
          with:
-          name: kernel
+
           path: kernel/flash_zip/*.zip
