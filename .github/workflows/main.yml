@@ -35,8 +35,8 @@ jobs:
           name: Kernel
           path: "kernel/flash_zip/*.zip"
           
-       - name: Upload kernel to release
-           uses: softprops/action-gh-release@v1
+
+       - uses: softprops/action-gh-release@v1
            
-           with:
+         with:
            files: kernel/flash_zip/*.zip
