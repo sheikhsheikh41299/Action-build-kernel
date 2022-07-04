@@ -1,0 +1,34 @@
+name: Build Kernel
+
+on:
+  push:
+    branches: main
+
+env:
+  KERNEL: https://github.com/sheikhshahnawaz41299/kernel_vivo_msm8916.git
+  KERNEL_BRANCH: cm-12.1-pd1510
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+       - name: Checkout
+         uses: actions/checkout@master
+         
+       - name: Setup Envoirment
+         run: |
+            sudo -E apt-get -qq install git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison device-tree-compiler   
+       - name: Clone Kernel
+         run: |
+            git clone $KERNEL --depth=1 -b $KERNEL_BRANCH kernel
+            
+       - name: Building
+         run: |
+            cd kernel
+            bash build.sh
+            
+       - uses: actions/upload-artifact@v2
+         with:
+          name: kernel
+          path: kernel/flash_zip/*.zip
