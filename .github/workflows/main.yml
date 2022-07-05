@@ -8,15 +8,11 @@ on:
         required: true
         default: 'none'
       KERNEL_BRANCH:
-        description: 'LIBRARY_BRANCH'
+        description: 'KERNEL_BRANCH'
         required: true
         default: 'none'
       DEVICE_NAME:
         description: 'DEVICE_NAME'
-        required: true
-        default: 'none'
-      MAKEFILE_NAME:
-        description: 'MAKEFILE_NAME'
         required: true
         default: 'none'
 
@@ -30,7 +26,7 @@ jobs:
       
     - name: Prepare the environment
       run: |
-          sudo -E apt-get -qq install git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison device-tree-compiler
+          sudo -E apt-get -qq install git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison device-tree-compiler 
           sudo -E apt-get -qq --reinstall install python3-minimal
           sudo -E apt-get -qq install -y libfdt-dev
       
@@ -42,8 +38,6 @@ jobs:
       
     - name: Clone Kernel
       run: |
-        
-        cd ${{ steps.pwd.outputs.pwd }}
         git clone ${{ github.event.inputs.KERNEL_URL }} -b ${{ github.event.inputs.KERNEL_BRANCH }} kernel
         
     - name: Building Kernel
