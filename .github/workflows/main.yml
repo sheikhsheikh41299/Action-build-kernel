@@ -33,10 +33,5 @@ jobs:
        - uses: actions/upload-artifact@v3
          with:
           name: Kernel
-          path: "kernel/flash_zip/*.zip"
+          path: kernel/flash_zip/*.zip
           
-       - name: kernel
-         uses: softprops/action-gh-release@v1
-           
-         with:
-           files: kernel/flash_zip/*.zip
