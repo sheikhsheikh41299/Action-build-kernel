@@ -55,7 +55,7 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: kernel/flash_zip/*.zip
-        name: ${{ github.event.inputs.DEVICE_NAME }}-${{ github.run_id }}
+        name: ${{ github.event.inputs.DEVICE_NAME }}-${{ github.event.inputs.KERNEL_BRANCH }}-${{ github.run_id }}
         tag_name: ${{ github.run_id }}
         body: Kernel for ${{ github.event.inputs.DEVICE_NAME }}
       env:
