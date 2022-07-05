@@ -30,8 +30,7 @@ jobs:
       
     - name: Prepare the environment
       run: |
-          sudo -E apt-get -qq install git fakeroot build-essential ncurses-dev
-		  xz-utils libssl-dev bc flex libelf-dev bison device-tree-compiler
+          sudo -E apt-get -qq install git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison device-tree-compiler
           sudo -E apt-get -qq --reinstall install python3-minimal
           sudo -E apt-get -qq install -y libfdt-dev
       
