@@ -1,37 +1,70 @@
 name: Build Kernel
 
 on:
-  push:
-    branches: main
-
-env:
-  KERNEL: https://github.com/sheikhshahnawaz41299/kernel_vivo_msm8916.git
-  KERNEL_BRANCH: cm-12.1-pd1510
+  workflow_dispatch:
+    inputs:
+      KERNEL_URL:
+        description: 'KERNEL_URL'
+        required: true
+        default: 'none'
+      KERNEL_BRANCH:
+        description: 'LIBRARY_BRANCH'
+        required: true
+        default: 'none'
+      DEVICE_NAME:
+        description: 'DEVICE_NAME'
+        required: true
+        default: 'none'
+      MAKEFILE_NAME:
+        description: 'MAKEFILE_NAME'
+        required: true
+        default: 'none'
 
 jobs:
   build:
+    if: github.event.repository.owner.id == github.event.sender.id
     runs-on: ubuntu-18.04
-
+    
     steps:
-       - name: Checkout
-         uses: actions/checkout@master
-         
-       - name: Setup Envoirment
-         run: |
-            sudo -E apt-get -qq install git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison device-tree-compiler
-            sudo -E apt-get -qq --reinstall install python3-minimal
-            sudo -E apt-get -qq install -y libfdt-dev
-       - name: Clone Kernel
-         run: |
-            git clone $KERNEL --depth=1 -b $KERNEL_BRANCH kernel
-            
-       - name: Building
-         run: |
+    - name: Check Out
+      uses: actions/checkout@main
+      
+    - name: Prepare the environment
+      run: |
+          sudo -E apt-get -qq install git fakeroot build-essential ncurses-dev
+		  xz-utils libssl-dev bc flex libelf-dev bison device-tree-compiler
+          sudo -E apt-get -qq --reinstall install python3-minimal
+          sudo -E apt-get -qq install -y libfdt-dev
+      
+    - name: Set variables
+      run: |
+        echo "::set-output name=date::$(date +%F)"
+      id: var
+
+      
+    - name: Clone Kernel
+      run: |
+        
+        cd ${{ steps.pwd.outputs.pwd }}
+        git clone ${{ github.event.inputs.KERNEL_URL }} -b ${{ github.event.inputs.KERNEL_BRANCH }} kernel
+        
+    - name: Building Kernel
+      run: |
+        
             cd kernel
-            bash build.sh
-            
-       - uses: actions/upload-artifact@v3
-         with:
+            bash build.sh   
+
+    - uses: actions/upload-artifact@v3
+        with:
           name: Kernel
-          path: kernel/flash_zip/*.zip
-          
+          path: kernel/flash_zip/*.zip			
+      
+    - name: Upload to Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: kernel/flash_zip/*.zip
+        name: ${{ github.event.inputs.DEVICE_NAME }}-${{ github.run_id }}
+        tag_name: ${{ github.run_id }}
+        body: Kernel for ${{ github.event.inputs.DEVICE_NAME }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
